@@ -13,12 +13,12 @@
 }
 ```
  
-* 用法
+* 用法
  
 ```java
 在layout文件中添加 
 
-    <com.guluwa.yflowlayout.YFlowLayout
+<com.guluwa.yflowlayout.YFlowLayout
         android:id="@+id/mFlowLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
