@@ -20,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final YFlowLayout mFlowLayout = findViewById(R.id.mFlowLayout);
+        YFlowLayout mFlowLayout = findViewById(R.id.mFlowLayout);
 
-        final LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+        LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
         for (int i = 0; i < strs.length; i++) {
             TextView view = (TextView) inflater.inflate(R.layout.label_layout, mFlowLayout, false);
             view.setText(strs[i]);
