@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+// 这里添加下面两行代码。
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 26
@@ -31,5 +34,80 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+}
+version = "0.0.1"
+def siteUrl = 'https://github.com/guluwa/YFlowLayout' // 项目主页。
+def gitUrl = 'https://github.com/guluwa/YFlowLayout.git' // Git仓库的url。
+group = "cn.guluwa"
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'YFLowLayout'
+                description '流式布局、支持点击事件'
+                url siteUrl
 
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'guluwa'
+                        name 'guluwa'
+                        email 'guluwama@gmail.com'
+                    }
+                }
+
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+// 生成jar包的task
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+// 生成jarDoc的task
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    // destinationDir = file("../javadoc/")
+    failOnError false // 忽略注释语法错误，如果用jdk1.8你的注释写的不规范就编译不过。
+}
+// 生成javaDoc的jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = "yflowlayout"
+        userOrg = 'guluwa'
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
 }
